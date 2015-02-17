@@ -13,15 +13,17 @@
         label: '@',
         resting: '@restingIcon',
         active: '@activeIcon',
+        mainActionCallback: '&mainActionCallback',
+        childCount: '@',
 
         menuState: '@',
         togglingMethod: '@',
       },
       template: '<ul class="mfb-component--{{position}} mfb-{{effect}}" data-mfb-toggle="{{togglingMethod}}" data-mfb-state="{{currentState}}">' +
                 ' <li class="mfb-component__wrap">' +
-                '  <a ng-click="toggleMenu()" data-mfb-label="{{label}}" class="mfb-component__button--main">' +
-                '   <i class="mfb-component__main-icon--resting {{resting}}"></i>' +
-                '   <i class="mfb-component__main-icon--active {{active}}"></i>' +              
+                '  <a ng-click="mainActionRestingClickHandler()" data-mfb-label="{{label}}" class="mfb-component__button--main">' +
+                '   <i class="mfb-component__main-icon--resting {{resting}}" ></i>' +
+                '   <i class="mfb-component__main-icon--active {{active}}" ng-click="mainActionActiveClickHandler()"></i>' +
                 '  </a>' +
                 '  <ul class="mfb-component__list" ng-transclude>' +
                 '  </ul>' +
@@ -42,6 +44,20 @@
 
         function _isHoverActive(){
           return scope.togglingMethod === 'hover';
+        }
+
+        /**
+         * Check if menu is currently open.
+         */
+        function _isOpen() {
+          return scope.currentState == openState;
+        }
+
+        /**
+         * Check if menu has any child actions.
+         */
+        function _hasChildActions() {
+          return scope.childCount > 0;
         }
 
         /**
@@ -68,9 +84,25 @@
          * from firing when hover is selected.
          */
         scope.toggleMenu = function() {
-          if ( _isHoverActive() ){ return; }
+          if ( _isHoverActive() && !_isTouchDevice()) {
+            return;
+          }
           scope.currentState = scope.currentState === openState ? closedState : openState;
         };
+
+        scope.mainActionActiveClickHandler = function() {
+          if (!_isTouchDevice() || _isOpen()) {
+            scope.mainActionCallback();
+          }
+        }
+
+        scope.mainActionRestingClickHandler = function() {
+          if (_hasChildActions()) {
+            scope.toggleMenu();
+          } else {
+            scope.mainActionCallback();
+          }
+        }
 
         /**
          * If on touch device AND 'hover' method is selected:
