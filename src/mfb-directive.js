@@ -22,11 +22,11 @@
       template: '<div>' +
                 '  <ul class="mfb-component--{{position}} mfb-{{effect}}" data-mfb-toggle="{{togglingMethod}}" data-mfb-state="{{currentState}}" off-click="closeMenu()">' +
                 '   <li class="mfb-component__wrap">' +
-                '    <a ng-click="mainActionRestingClickHandler()" data-mfb-label="{{label}}" class="mfb-component__button--main">' +
+                '    <a ng-click="mainActionRestingClickHandler();" data-mfb-label="{{label}}" class="mfb-component__button--main">' +
                 '     <i class="mfb-component__main-icon--resting {{resting}}" ></i>' +
-                '     <i class="mfb-component__main-icon--active {{active}}" ng-click="mainActionActiveClickHandler()"></i>' +
+                '     <i class="mfb-component__main-icon--active {{active}}" ng-click="mainActionActiveClickHandler(); $event.stopPropagation();"></i>' +
                 '    </a>' +
-                '    <ul class="mfb-component__list" ng-transclude ng-click="toggleMenu()">' +
+                '    <ul class="mfb-component__list" ng-transclude ng-click="toggleMenu();">' +
                 '    </ul>' +
                 '   </li>' +        
                 '  </ul>' +
