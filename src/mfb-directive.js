@@ -22,9 +22,9 @@
       template: '<div>' +
                 '  <ul class="mfb-component--{{position}} mfb-{{effect}}" data-mfb-toggle="{{togglingMethod}}" data-mfb-state="{{currentState}}" off-click="closeMenu()">' +
                 '   <li class="mfb-component__wrap">' +
-                '    <a ng-click="mainActionRestingClickHandler();" data-mfb-label="{{label}}" class="mfb-component__button--main">' +
+                '    <a ng-click="mainActionClickHandler();" data-mfb-label="{{label}}" class="mfb-component__button--main">' +
                 '     <i class="mfb-component__main-icon--resting {{resting}}" ></i>' +
-                '     <i class="mfb-component__main-icon--active {{active}}" ng-click="mainActionActiveClickHandler(); $event.stopPropagation();"></i>' +
+                '     <i class="mfb-component__main-icon--active {{active}}"></i>' +
                 '    </a>' +
                 '    <ul class="mfb-component__list" ng-transclude ng-click="toggleMenu();">' +
                 '    </ul>' +
@@ -99,17 +99,13 @@
           scope.currentState = closedState;
         }
 
-        scope.mainActionActiveClickHandler = function() {
-          if (!_isTouchDevice() || _isOpen()) {
+        scope.mainActionClickHandler = function() {
+          if (scope.mainActionCallback && (!_hasChildActions() || _isOpen())) {
             scope.mainActionCallback();
           }
-        }
 
-        scope.mainActionRestingClickHandler = function() {
           if (_hasChildActions()) {
             scope.toggleMenu();
-          } else {
-            scope.mainActionCallback();
           }
         }
 
