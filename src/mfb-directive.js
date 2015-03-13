@@ -100,7 +100,16 @@
         }
 
         scope.mainActionClickHandler = function() {
-          if (scope.mainActionCallback && (!_hasChildActions() || _isOpen())) {
+          var shouldTriggerMainAction = (
+            scope.mainActionCallback &&
+            (
+              !_hasChildActions() || // if the menu has children it should open, instead of triggering the main action.
+              _isOpen() || // if the menu is open, then the main action should be triggered
+              (!_isTouchDevice() && _isHoverActive()) // if on desktop and hover is active, when the user clicks in main button, it is already open, so triggers the main action
+            )
+          );
+
+          if (shouldTriggerMainAction) {
             scope.mainActionCallback();
           }
 
